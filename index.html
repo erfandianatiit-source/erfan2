@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>💖 برنامه غذایی دیانتی | همراه با DeepSeek AI</title>
+<title>آقا عرفان | برنامه غذایی هوشمند</title>
 <style>
   * {
     margin: 0;
@@ -47,6 +47,8 @@
     text-align: center;
     margin-bottom: 20px;
   }
+  .badge h1 { font-size: 28px; }
+  .badge h1 span { color: #f7c56e; }
   .shift-selector {
     background: white;
     border-radius: 40px;
@@ -72,7 +74,7 @@
   .meal-time { font-weight: bold; color: #e67e22; width: 80px; font-size: 14px; }
   .meal-name { flex: 1; font-size: 14px; font-weight: bold; }
   .meal-cal { background: #e8f5e9; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: #27ae60; }
-  .meal-options { background: #fafafa; border-radius: 20px; padding: 12px; margin-top: 8px; }
+  .meal-options { background: #fafafa; border-radius: 20px; padding: 12px; margin-top: 8px; max-height: 250px; overflow-y: auto; }
   .option-item {
     display: flex;
     align-items: center;
@@ -88,6 +90,8 @@
   .option-item.chosen { background: #e8f5e9; border-color: #27ae60; }
   .option-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #bbb; background: white; }
   .option-item.chosen .option-radio { background: #27ae60; border-color: #27ae60; }
+  .option-text { flex: 1; font-size: 13px; }
+  .option-cal { font-size: 12px; color: #27ae60; font-weight: bold; }
   .summary { background: #2c3e50; color: white; border-radius: 28px; padding: 18px; text-align: center; margin-top: 12px; }
   .summary .total { font-size: 32px; font-weight: bold; color: #f7c56e; }
 
@@ -103,23 +107,24 @@
   .chat-input-area { display: flex; padding: 12px; gap: 10px; background: white; border-top: 1px solid #eee; }
   .chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; font-size: 14px; }
   .chat-input-area button { background: #27ae60; color: white; border: none; padding: 0 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
-  .typing { font-size: 12px; color: #888; margin-top: 5px; margin-right: 10px; }
   .warning-tip { background: #fff3e0; border-right: 4px solid #f39c12; padding: 14px; border-radius: 20px; font-size: 12px; margin-top: 16px; }
   .footer { text-align: center; font-size: 11px; color: #888; margin-top: 20px; }
+  @keyframes eggShake { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2) rotate(5deg);} }
+  .egg-crack { animation: eggShake 0.3s ease; }
 </style>
 </head>
 <body>
 
 <div class="welcome-overlay" id="welcomeOverlay">
-  <div class="welcome-heart">❤️</div>
-  <div class="welcome-text">به برنامه غذایی دیانتی خوش آمدی!</div>
-  <div class="welcome-sub">موس شکل قلب | دستیار هوشمند DeepSeek</div>
+  <div class="welcome-heart">🐔❤️</div>
+  <div class="welcome-text">به برنامه آقا عرفان خوش آمدی!</div>
+  <div class="welcome-sub">موس شکل قلب | چت با ChatGPT | ۱۰ غذا برای هر وعده</div>
 </div>
 
 <div class="container">
   <div class="badge">
-    <h1>👮‍♂️ <span style="color:#f7c56e">دیانتی</span> جان</h1>
-    <p>برنامه غذایی مخصوص شیفت‌های چرخشی | ۱۴۰۰-۱۵۵۰ کالری سالم</p>
+    <h1>👨‍🍳 <span>آقا عرفان</span> جان</h1>
+    <p>برنامه غذایی هوشمند | ۱۰ غذای مختلف برای هر وعده | ۱۴۰۰-۱۵۵۰ کالری</p>
   </div>
 
   <div class="shift-selector" id="shiftSelector">
@@ -133,11 +138,11 @@
 
   <div class="chat-container">
     <div class="chat-header">
-      💬 چت با دستیار هوشمند (DeepSeek AI)
+      💬 چت با ChatGPT (هوش مصنوعی)
       <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:12px;">آنلاین</span>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="message assistant"><div class="bubble">سلام رفیق! ❤️ من DeepSeek هستم. هر سوالی درباره برنامه غذایی، کالری، شیفت‌ها یا هر چیز دیگه داری، بپرس. دقیق و سریع جواب میدم.</div></div>
+      <div class="message assistant"><div class="bubble">سلام آقا عرفان! ❤️ من ChatGPT هستم. هر سوالی درباره برنامه غذایی، کالری، شیفت‌ها یا هر چیز دیگه داری، بپرس. با ۱۰ غذا برای هر وعده، دقیق و سریع جواب میدم.</div></div>
     </div>
     <div class="chat-input-area">
       <input type="text" id="chatInput" placeholder="سوال خود را بنویسید...">
@@ -149,32 +154,60 @@
     ⚠️ نکته رفیقانه: کار فیزیکی و استرسی نیاز به انرژی کافی داره. کمتر از ۱۲۰۰ کالری ممنوع! بین وعده‌ها حتما آب بنوش.
   </div>
   <div class="footer">
-    ✅ انتخاب غذاها ذخیره میشه | موس شکل قلب 💖 | دستیار هوشمند DeepSeek
+    ✅ ۱۰ غذا برای هر وعده | موس شکل قلب 💖 | چت با ChatGPT
   </div>
 </div>
 
 <script>
-// ========== غذاها ==========
+// ========== ۱۰ غذا برای هر وعده ==========
 const mealsDB = {
   breakfast: [
     { name: "۳ عدد تخم‌مرغ آبپز + ۱ برش نان سنگک + خیار و گوجه", cal: 380, detail: "پروتئین بالا" },
     { name: "جو دوسر با شیر (۴۰ گرم جو + ۲۰۰ml شیر) + ۵ عدد گردو + دارچین", cal: 390, detail: "انرژی زا" },
-    { name: "ماست یونانی (۱۵۰ گرم) + ۲ تخم‌مرغ آبپز + ۵ توت فرنگی", cal: 370, detail: "کلسیم و پروتئین" }
+    { name: "ماست یونانی (۱۵۰ گرم) + ۲ تخم‌مرغ آبپز + ۵ توت فرنگی", cal: 370, detail: "کلسیم و پروتئین" },
+    { name: "حلیم بدون روغن (۳۰۰ گرم) + ۲ عدد نان سنگک", cal: 420, detail: "مقوی و گرم" },
+    { name: "عدسی + ۲ عدد نان سبوس‌دار + پیاز داغ", cal: 400, detail: "فیبر و آهن" },
+    { name: "کاله جوش (نخود + کشک + سیر داغ) + ۱ برس نان", cal: 450, detail: "سنتی و مقوی" },
+    { name: "فرنی شیر برنج + دارچین + ۵ عدد گردو", cal: 390, detail: "شیرین و انرژی‌زا" },
+    { name: "املت سیب‌زمینی (۲ تخم‌مرغ + ۱ سیب‌زمینی) + گوجه", cal: 410, detail: "سیرکننده" },
+    { name: "پنیر محلی (۵۰ گرم) + گردو (۴ عدد) + نان بربری + سبزی", cal: 430, detail: "صبحانه سنتی" },
+    { name: "اسموتی پروتئینی (شیر + موز + پودر پروتئین + کره بادام‌زمینی)", cal: 440, detail: "مناسب ورزشکاران" }
   ],
   lunch: [
     { name: "سینه مرغ کبابی (۱۵۰ گرم) + ۱ کف دست برنج قهوه‌ای + سالاد", cal: 500, detail: "وعده اصلی" },
     { name: "ماهی قزل‌آلا (۱۳۰ گرم) + سیب‌زمینی آبپز + سبزی بخارپز", cal: 490, detail: "امگا ۳ بالا" },
-    { name: "خوراک عدس + ۱۲۰ گرم مرغ + نان سبوس‌دار", cal: 470, detail: "فیبر و آهن" }
+    { name: "خوراک عدس + ۱۲۰ گرم مرغ + نان سبوس‌دار", cal: 470, detail: "فیبر و آهن" },
+    { name: "خورش قرمه سبزی + ۱ کف دست برنج", cal: 560, detail: "ایرانی سنتی" },
+    { name: "چلو کباب کوبیده (۲ سیخ) + گوجه کبابی + برنج", cal: 550, detail: "محبوب و مقوی" },
+    { name: "خورش قیمه + ۱ کف دست برنج", cal: 540, detail: "کامل و خوشمزه" },
+    { name: "مرغ با آلو + ۱ کف دست برنج", cal: 530, detail: "ترش و شیرین" },
+    { name: "آش رشته + ۲ عدد نان + کشک (اختیاری)", cal: 520, detail: "مقوی و گرم" },
+    { name: "کوفته تبریزی (۱ عدد) + نان سنگک + ماست", cal: 550, detail: "سنتی و سیرکننده" },
+    { name: "سالاد سزار با مرغ گریل شده", cal: 480, detail: "سبک و خوشمزه" }
   ],
   snack: [
-    { name: "۱ عدد سیب + ۱۵ گرم بادام خام", cal: 150, detail: "ویتامین C" },
+    { name: "۱ عدد سیب سبز + ۱۰ عدد بادام خام", cal: 150, detail: "ویتامین C" },
     { name: "۱ پیاله ماست ۲٪ + خیار + نعناع", cal: 120, detail: "سبک و خنک" },
-    { name: "۲۰۰ml شیر کم‌چرب + ۱ موز کوچک", cal: 170, detail: "کلسیم و انرژی" }
+    { name: "۲۰۰ml شیر کم‌چرب + ۱ موز کوچک", cal: 170, detail: "کلسیم و انرژی" },
+    { name: "۲ عدد خرما + ۱ قاشق کره بادام‌زمینی", cal: 160, detail: "انرژی فوری" },
+    { name: "۱ عدد گلابی + ۵ عدد گردو", cal: 155, detail: "فیبر و چربی سالم" },
+    { name: "لبوی آبپز + نمک و زیره", cal: 120, detail: "آنتی‌اکسیدان" },
+    { name: "تخمه کدو (۲ قاشق) + ۱ عدد پرتقال", cal: 140, detail: "روی و ویتامین C" },
+    { name: "اسموتی سبز (اسفناج + سیب + زنجبیل)", cal: 130, detail: "انرژی و سم‌زدایی" },
+    { name: "پنیر کم‌چرب (۳۰ گرم) + ۱ عدد خیار", cal: 125, detail: "پروتئین سریع" },
+    { name: "چای سبز + ۲ عدد بیسکویت سبوس‌دار", cal: 145, detail: "کافئین ملایم" }
   ],
   dinner: [
     { name: "سوپ جو و سبزیجات + ۱ تخم‌مرغ آبپز + نان سبوس‌دار", cal: 330, detail: "سبک و مغذی" },
     { name: "سالاد مرغ + کینوا + سس ماست", cal: 350, detail: "سالاد کامل" },
-    { name: "املت ۳ عدد تخم‌مرغ + قارچ و گوجه", cal: 310, detail: "پروتئین خالص" }
+    { name: "املت ۳ عدد تخم‌مرغ + قارچ و گوجه", cal: 310, detail: "پروتئین خالص" },
+    { name: "کتلت سیب‌زمینی (۲ عدد) + سالاد فصل", cal: 340, detail: "سبک و خانگی" },
+    { name: "ماهی تن + سبزی خوردن + سالاد", cal: 320, detail: "سبک و سریع" },
+    { name: "سیرابی آبگوشتی + ۱ عدد نان سنگک", cal: 370, detail: "سنتی مقوی" },
+    { name: "کوکو سبزی (۳ تخم‌مرغ) + ماست", cal: 345, detail: "سبزیجات معطر" },
+    { name: "نیمرو (۳ عدد تخم‌مرغ) + ۲ عدد نان + گوجه", cal: 380, detail: "سریع و مقوی" },
+    { name: "آبگوشت (۱ پیاله) + ۲ عدد نان", cal: 390, detail: "مقوی و سنتی" },
+    { name: "ماکارونی با سینه مرغ و قارچ (۶۰ گرم پاستا)", cal: 420, detail: "خوشمزه و مقوی" }
   ]
 };
 
@@ -210,13 +243,21 @@ const schedules = {
 };
 
 let currentShift = "morning";
-let selections = JSON.parse(localStorage.getItem("diyanati_deepseek")) || {
+let selections = JSON.parse(localStorage.getItem("aghaerfan_food")) || {
   morning: { breakfast:0, lunch:0, snack:0, dinner:0 },
   noon: { breakfast:0, lunch:0, snack:0, dinner:0 },
   night: { breakfast:0, snack:0, dinner:0, extraMeal:0 }
 };
 
-function saveSelections() { localStorage.setItem("diyanati_deepseek", JSON.stringify(selections)); }
+function saveSelections() { localStorage.setItem("aghaerfan_food", JSON.stringify(selections)); }
+
+function eggCrackEffect() {
+  const container = document.querySelector(".container");
+  if(container) {
+    container.style.animation = "none";
+    setTimeout(() => { container.style.animation = ""; }, 10);
+  }
+}
 
 function render() {
   const schedule = schedules[currentShift];
@@ -230,7 +271,7 @@ function render() {
     if (currentShift === "night" && mealType === "breakfast" && i === 2) actualIdxKey = "extraMeal";
     if (currentShift === "night" && mealType === "breakfast" && i === 4) actualIdxKey = "breakfast";
     let selectedIdx = selections[currentShift][actualIdxKey] || 0;
-    const option = mealsDB[mealType][selectedIdx % mealsDB[mealType].length];
+    const option = mealsDB[mealType][selectedIdx];
     totalCal += option.cal;
     html += `<div><div class="meal-row"><div class="meal-time">${m.time}</div><div class="meal-name">${m.label}</div><div class="meal-cal">~${option.cal} کالری</div></div>`;
     html += `<div class="meal-options">`;
@@ -238,7 +279,7 @@ function render() {
       const opt = mealsDB[mealType][optIdx];
       const isChosen = (selectedIdx === optIdx);
       html += `<div class="option-item ${isChosen ? 'chosen' : ''}" data-meal="${actualIdxKey}" data-type="${mealType}" data-opt="${optIdx}">
-        <div class="option-radio"></div><div class="option-text"><strong>${opt.name}</strong><br><small style="color:#888">${opt.detail}</small></div>
+        <div class="option-radio"></div><div class="option-text"><strong>${opt.name}</strong><br><small style="color:#888">${opt.detail} | ${opt.cal} کالری</small></div>
         <div class="option-cal">${opt.cal} کال</div></div>`;
     }
     html += `</div></div>`;
@@ -254,6 +295,7 @@ function render() {
       selections[currentShift][mealKey] = optVal;
       saveSelections();
       render();
+      eggCrackEffect();
     });
   });
 }
@@ -265,18 +307,17 @@ function setShift(shift) {
     else btn.classList.remove("active");
   });
   render();
+  eggCrackEffect();
 }
 
-// ========== چت وصل به DeepSeek (من خودم!) ==========
+// ========== چت با ChatGPT از طریق API ==========
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendBtn");
 
-let chatHistory = JSON.parse(localStorage.getItem("dianati_chat")) || [];
+let chatHistory = JSON.parse(localStorage.getItem("aghaerfan_chat")) || [];
 
-function saveChat() {
-  localStorage.setItem("dianati_chat", JSON.stringify(chatHistory));
-}
+function saveChat() { localStorage.setItem("aghaerfan_chat", JSON.stringify(chatHistory)); }
 
 function addMessage(role, text) {
   const msgDiv = document.createElement("div");
@@ -291,7 +332,7 @@ function addMessage(role, text) {
 function loadChat() {
   chatMessages.innerHTML = "";
   if (chatHistory.length === 0) {
-    addMessage("assistant", "سلام رفیق! ❤️ من DeepSeek هستم. هر سوالی درباره برنامه غذایی، کالری، شیفت‌ها یا هر چیز دیگه داری، بپرس. دقیق و سریع جواب میدم.");
+    addMessage("assistant", "سلام آقا عرفان! ❤️ من ChatGPT هستم. با ۱۰ غذا برای هر وعده، آماده کمک به شما هستم.");
   } else {
     chatHistory.forEach(msg => addMessage(msg.role, msg.text));
   }
@@ -303,7 +344,6 @@ async function sendMessage() {
   addMessage("user", question);
   chatInput.value = "";
   
-  // نمایش وضعیت تایپ
   const typingDiv = document.createElement("div");
   typingDiv.className = "message assistant";
   typingDiv.innerHTML = `<div class="bubble" style="background:#555;">🤔 در حال فکر کردن...</div>`;
@@ -311,17 +351,16 @@ async function sendMessage() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
   try {
-    // اتصال به DeepSeek API (از طریق CORS proxy)
-    const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer sk-4e8e8d4e5e4e4e4e4e4e4e4e4e4e4e4e"  // کلید عمومی تست
+        "Authorization": "Bearer YOUR_OPENAI_API_KEY"  // کلید خود را اینجا وارد کنید
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "تو یک دستیار تغذیه و رژیم غذایی هستی به نام 'دستیار دیانتی'. به زبان فارسی روان و صمیمی پاسخ بده. مخاطب یک نیروی انتظامی با شیفت‌های کاری نامنظم است." },
+          { role: "system", content: "تو یک دستیار تغذیه و رژیم غذایی هستی به نام 'دستیار آقا عرفان'. به زبان فارسی روان و صمیمی پاسخ بده. مخاطب با برنامه غذایی ۱۰ تایی کار میکنه." },
           { role: "user", content: question }
         ],
         max_tokens: 500,
@@ -339,12 +378,10 @@ async function sendMessage() {
     }
   } catch (error) {
     typingDiv.remove();
-    // پاسخ آفلاین ساده در صورت قطعی نت
-    let offlineReply = "سایت در حال اتصال به هوش مصنوعی است. لطفاً چند ثانیه دیگر دوباره تلاش کن. اگر مشکل ادامه داشت، اینترنت خود را چک کن.";
-    if (question.includes("سلام")) offlineReply = "سلام رفیق! ❤️ من اینجام. چطور میتونم کمکت کنم؟";
+    let offlineReply = "لطفاً کلید API معتبر OpenAI را در کد وارد کنید. برای راهنما به من بگویید.";
+    if (question.includes("سلام")) offlineReply = "سلام آقا عرفان! ❤️ برای استفاده از ChatGPT، باید کلید API را در قسمت مشخص شده وارد کنید.";
     else if (question.includes("کالری")) offlineReply = "مجموع کالری روزانه در پایین صفحه نمایش داده میشه. حدود ۱۳۰۰ تا ۱۵۵۰ کالریه.";
     else if (question.includes("شیفت")) offlineReply = "سه شیفت داری: صبح (۷-۱۵)، ظهر (۱۴:۳۰-۲۳:۳۰)، شب (۲۲:۳۰-۷:۳۰). از دکمه‌های بالا انتخاب کن.";
-    else if (question.includes("سرگیجه")) offlineReply = "سرگیجه معمولاً از کمبود کالری یا کم آبی است. حتماً وعده‌های غذایی رو کامل بخور و روزی ۲-۳ لیتر آب بنوش.";
     addMessage("assistant", offlineReply);
   }
 }
